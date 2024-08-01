@@ -6,6 +6,10 @@ const userRouter = require('./routes/userRouter');
 const cartRouter = require('./routes/cartRouter');
 const authRouter = require('./routes/authRoute');
 const { isLoggedIn } = require('./validation/authVaildator');
+const uploader = require('./middleware/multerMiddleware');
+const cloudinary = require('./config/cloudinaryConfig');
+const fs = require('fs/promises')
+
 
 const app = express();
 
@@ -23,10 +27,11 @@ app.use('/auth', authRouter);
 
 
 
-app.get('/ping', isLoggedIn, (req, res) => {
-      console.log(req.body)
-      console.log(req.cookies);
-      return res.json({message : "pong"})
+app.post('/photo',  uploader.single('incomingFile'), async(req, res) => {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      console.log(result);
+      await fs.unlink(req.file.path)
+      return res.json({message : "ok"})
 })
 
 app.listen(serverConfig.PORT, async() =>{
