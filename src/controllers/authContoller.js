@@ -6,7 +6,6 @@ async function login(req, res){
     const loginPayload = req.body;
     const response = await loginUser(loginPayload)
      
-    console.log(response)
     res.cookie("authToken", response, {
         httpOnly: true,
         secure: false,

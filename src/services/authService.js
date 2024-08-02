@@ -9,7 +9,6 @@ async function loginUser(authDetails){
     const UserRepo = new UserRepository()
     // 1 .CHECK IF THERE IS A REGISTERED USER WITH THE GIVEN EMAIL
     const user = await UserRepo.findUser({email});
-    console.log(plainPassword)
     if(!user) {
         throw {message: "No user found with the given email", statusCode: 404};
     }
@@ -18,8 +17,9 @@ async function loginUser(authDetails){
     if(!isPasswordVlidated){
         throw{ message: 'Invalid password , please try again', statusCode : 401};
     }
+    const userRole = user.role ? user.role : "User";
     // 3 . If the password is validated, create a token and return it
-    const token = jwt.sign({email :user.email, id: user._id}, JWT_SECRET, {
+    const token = jwt.sign({email :user.email, id: user._id, role: userRole}, JWT_SECRET, {
         expiresIn: JWT_EXPIRY
     })
     return token
