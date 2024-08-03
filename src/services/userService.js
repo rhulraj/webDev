@@ -1,3 +1,5 @@
+const { createcart } = require("../repositories/cartRepository");
+
 class UserService {
 
     constructor(_userRepository) {
@@ -29,7 +31,7 @@ class UserService {
             throw {reason : "something went wrong, cannot create user", statusCode: 500}
         }
         // 3 return the user
-
+       await createcart(newUser._id);
         return newUser
     }
 }
