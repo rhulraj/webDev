@@ -12,34 +12,64 @@ async function getCart(userId) {
    return cart;
 }
 
-async function addToCart(UserId, ProductId){
+async function modifyProductToCart(UserId, ProductId, shouldAdd = true){
+
+    const quantityValue = shouldAdd ? + 1 :  -1;
+
     const cart = await getCart(UserId);
+
     const product = await getProductById(ProductId);
+
     if(!product) {
         throw new notFoundError("product");
     }
+
     if(!product.inStock && product.quantity < 0){
         throw new BadRequestError("Product not available in stock");
     }
+
     //May be in the product already in the the cart
     let foundProduct = false
+
     cart.items.forEach((item) =>{
-        if(item.product == ProductId){
-        if(product.inStock && product.quantity >= item.qauntity + 1){
-            item.qauntity += 1
-        }else{
-            throw new AppError("The quantity of the item requested is not available", 404);
+
+        if(item.product._id == ProductId){
+           if(shouldAdd){
+                if(product.inStock && product.quantity > item.qauntity + 1){
+                    item.qauntity += quantityValue;
+    
+                }else{
+                    throw new AppError("The quantity of the item requested is not available", 404);
+                }
+           }else{
+                if(item.qauntity > 0){
+                    item.qauntity += quantityValue;
+                    if(item.qauntity == 0){
+                        cart.items =cart.items.filter(item => item.product._id != ProductId );
+                        foundProduct = true;
+                        return;
+                    }
+                }else{
+                    throw new AppError("The quantity of the item requested is not available", 404);
+                }
+           }
+
         }
-        foundProduct = true;
-        }
+   
+    foundProduct = true;
  })
   
     if(!foundProduct){
-        cart.items.push({
-            product : ProductId,
-            qauntity:1
-        })
-    }
+        if(shouldAdd){
+           cart.items.push({
+               product : ProductId,
+               qauntity:1
+        }) 
+        }else {
+            throw new notFoundError("product not found in cart"); 
+        }
+        }
+    
        
     await cart.save();
     
@@ -48,5 +78,5 @@ async function addToCart(UserId, ProductId){
 }
 module.exports ={
     getCart,
-    addToCart
+    modifyProductToCart
 }
