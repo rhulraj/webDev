@@ -1,4 +1,4 @@
-const {getCartById} = require("../repositories/cartRepository")
+const {getCartById, clearAllProductToCart} = require("../repositories/cartRepository")
 const  notFoundError  = require("../utils/notFoundError");
 const { getProductById } = require("../repositories/productRepository");
 const AppError = require("../utils/appError");
@@ -35,7 +35,7 @@ async function modifyProductToCart(UserId, ProductId, shouldAdd = true){
 
         if(item.product._id == ProductId){
            if(shouldAdd){
-                if(product.inStock && product.quantity > item.qauntity + 1){
+                if(product.inStock && product.quantity > item.qauntity ){
                     item.qauntity += quantityValue;
     
                 }else{
@@ -76,7 +76,14 @@ async function modifyProductToCart(UserId, ProductId, shouldAdd = true){
     return cart
     
 }
+
+async function clearCartById(userId){
+        const cart = await clearAllProductToCart(cartId);
+        return cart;
+}
+
 module.exports ={
     getCart,
-    modifyProductToCart
+    modifyProductToCart,
+    clearCartById
 }
