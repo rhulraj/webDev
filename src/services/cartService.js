@@ -78,7 +78,7 @@ async function modifyProductToCart(UserId, ProductId, shouldAdd = true){
 }
 
 async function clearCartById(userId){
-        const cart = await clearAllProductToCart(cartId);
+        const cart = await clearAllProductToCart(userId);
         return cart;
 }
 

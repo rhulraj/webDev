@@ -41,7 +41,10 @@ const userSchema = new mongoose.Schema({
       type : String,
       enum: ['USER', 'ADMIN'],
       default: "USER"
-    }
+    },
+     address : {
+      type : String
+     }
 },{
     timestamps: true
 })
