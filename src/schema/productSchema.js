@@ -27,11 +27,16 @@ const productSchema = new mongoose.Schema({
         type : Boolean,
         required: [true, "In stock  status is required"],
         default : true
+    }, 
+    quantity:{
+        type: Number,
+        required : [true, "Quantitiy is required"],
+        default: 10
     }
 }, {
     timestamps : true
 })
 
-const Product  =  mongoose.model('product', productSchema);
+const Product  =  mongoose.model('Product', productSchema);
 
 module.exports = Product;

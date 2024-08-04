@@ -26,6 +26,7 @@ class UserService {
             mobileNumber: userDetails.mobileNumber,
             email: userDetails.email,
             password: userDetails.password,
+            role: userDetails.role
         });
         if(!newUser){
             throw {reason : "something went wrong, cannot create user", statusCode: 500}

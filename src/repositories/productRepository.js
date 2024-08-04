@@ -3,10 +3,11 @@ const BadRequestError = require("../utils/badRequest");
 const InternalServerError = require("../utils/internalServerError");
 
 async function createProduct(productDetails){
-    
+   
     try{
         const product = await Product.create(productDetails);
-    return product;
+        return product;
+        
     } catch (error){
          if(error.name === 'ValidationError'){
            const errorMessagelist= Object.keys(error.errors).map((property) => {

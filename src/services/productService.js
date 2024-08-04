@@ -3,6 +3,7 @@ const cloudinary = require('../config/cloudinaryConfig');
 const fs = require('fs/promises');
 const InternalServerError = require("../utils/internalServerError");
 const notFoundError = require("../utils/notFoundError");
+const { response } = require("express");
 
 async function productService(productDetails){
     //1. we shoudcheck if an image is coming to create the product, then weshould first upload it on
@@ -18,13 +19,12 @@ async function productService(productDetails){
             throw new InternalServerError()
         }
     }
-
       //2. Then use the url from cloudinary and other product details to add product in db
       const product = await productRepository.createProduct({
         ...productDetails,
         prductImage: ProductImage
       });
-
+    console.log(product)
       return product;
 }
 

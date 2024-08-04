@@ -10,7 +10,8 @@ async function addProduct(req, res){
         imagePath: req.file?.path,
         price: req.body.price,
         category: req.body.category, // if category is undefined, veg will be stored 
-        inStock: req.body.inStock   // if inStock is undefined, true will be stored 
+        inStock: req.body.inStock,   // if inStock is undefined, true will be stored 
+        quantity: req.body.quantity
     })
     return res.status(201).json({
         success: true,

@@ -36,10 +36,11 @@ const userSchema = new mongoose.Schema({
            type: String,
            required : [true, "Password should be provided"],
            minlength: [6, "Password should be minimum 6 character long"]
-    }, role:{
+    }, 
+    role:{
       type : String,
       enum: ['USER', 'ADMIN'],
-      DEFAULT: "User"
+      default: "USER"
     }
 },{
     timestamps: true
@@ -51,5 +52,5 @@ userSchema.pre('save', async function(){
   this.password = hashedPassword;
 })
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model('User', userSchema);
 module.exports = User;
