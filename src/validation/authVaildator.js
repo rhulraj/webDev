@@ -2,8 +2,10 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../config/serverConfig');
 const UnauthorisedError = require('../utils/unauthorisedError');
 
+
 async function isLoggedIn(req, res, next) {
     const token = req.cookies['authToken'];
+   
     
     if(!token) {
         return res.status(401).json({
@@ -13,9 +15,10 @@ async function isLoggedIn(req, res, next) {
             message: "No Auth Token provided"
         })
     }
+  
     try{
-    const decoded = jwt.verify(token, JWT_SECRET);
-
+        const decoded = await jwt.verify(token, JWT_SECRET);
+    
     if(!decoded){
         throw new UnauthorisedError();
     }
@@ -27,7 +30,20 @@ async function isLoggedIn(req, res, next) {
     }
     next()
     } catch(error){
-    
+        if(error.name === 'TokenExpiredError'){
+            res.cookie("authToken", "",{
+                httpOnly: true,
+                secure: false,
+                maxAge: 7 * 24 * 60 * 60 * 1000
+                
+            });
+            return res.status(200).json({
+                success : true,
+                message: 'logged out  successfully',
+                data: {},
+                error: {}
+            })
+        }
         return res.status(401).json({
             success: false,
             data: {},

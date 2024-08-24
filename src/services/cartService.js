@@ -12,12 +12,12 @@ async function getCart(userId) {
    return cart;
 }
 
-async function modifyProductToCart(UserId, ProductId, shouldAdd = true){
+async function modifyProductToCart(UserId, ProductId, shouldAdd ){
 
     const quantityValue = shouldAdd ? + 1 :  -1;
 
     const cart = await getCart(UserId);
-
+    console.log(cart)
     const product = await getProductById(ProductId);
 
     if(!product) {

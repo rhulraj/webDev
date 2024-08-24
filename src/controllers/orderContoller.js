@@ -16,7 +16,7 @@ async function createNewOrder(req, res){
         if(err instanceof AppError){
             return res.status(err.statusCode).json({
                 success: false,
-                message: err.reason,
+                message: err.message,
                 data: {},
                 error: err
         })
@@ -46,7 +46,7 @@ async function getAllOrdersByUser(req, res){
         if(err instanceof AppError){
             return res.status(err.statusCode).json({
                 success: false,
-                message: err.reason,
+                message: err.message,
                 data: {},
                 error: err
         })
@@ -76,7 +76,7 @@ async function getOrder(req, res){
         if(err instanceof AppError){
             return res.status(err.statusCode).json({
                 success: false,
-                message: err.reason,
+                message: err.message,
                 data: {},
                 error: err
         })
@@ -106,7 +106,7 @@ async function cancleOrder(req, res){
         if(err instanceof AppError){
             return res.status(err.statusCode).json({
                 success: false,
-                message: err.reason,
+                message: err.message,
                 data: {},
                 error: err
         })
@@ -136,7 +136,7 @@ async function changeOrderStatus(req, res){
         if(err instanceof AppError){
             return res.status(err.statusCode).json({
                 success: false,
-                message: err.reason,
+                message: err.message,
                 data: {},
                 error: err
         })

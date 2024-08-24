@@ -5,16 +5,18 @@ const connectDB = require('./config/dbConfig');
 const userRouter = require('./routes/userRouter');
 const cartRouter = require('./routes/cartRouter');
 const authRouter = require('./routes/authRoute');
-const { isLoggedIn } = require('./validation/authVaildator');
 const uploader = require('./middleware/multerMiddleware');
-const fs = require('fs/promises');
+const cors = require('cors')
 const productRouter = require('./routes/productRoute');
 const orderRouter = require('./routes/orderRoute');
 
 
 const app = express();
-
-app.use(cookieParser())
+app.use(cors({
+      origin: 'http://localhost:5173',  // allow to users to accept request from different origin
+      credentials: true, //allow session cookie from browser to pass through
+}));
+app.use(cookieParser());
 //deserealise the url data
 app.use(express.json());
 app.use(express.text());
@@ -26,7 +28,7 @@ app.use('/users', userRouter); // connects the router to the server
 app.use('/carts', cartRouter);
 app.use('/auth', authRouter);
 app.use('/products', productRouter)
-app.use('order', orderRouter);
+app.use('/order', orderRouter);
 
 
 

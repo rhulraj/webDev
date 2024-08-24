@@ -4,10 +4,13 @@ const InternalServerError = require("../utils/internalServerError");
 
 async function createNewOrder(orderDetails){
     try{
+        console.log(orderDetails)
         const order = await Order.create(orderDetails);
+        console.log(order)
         return order;
 
     }catch( error){
+        console.log(error)
         if(error.name === 'ValidationError'){
             const errorMessagelist= Object.keys(error.errors).map((property) => {
                return error.errors[property].message;

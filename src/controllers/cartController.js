@@ -14,7 +14,7 @@ async function getCartByUser(req, res) {
         if(err instanceof AppError){
             return res.status(err.statusCode).json({
                 success: false,
-                message: err.reason,
+                message: err.message,
                 data: {},
                 error: err
         })
@@ -31,10 +31,12 @@ async function getCartByUser(req, res) {
 }
 async function addProductToCart(req, res){
     try{
+        
         const cart = await modifyProductToCart(req.user.id, req.params.productId, req.params.operation === "add");
+        console.log(cart)
         return res.status(200).json({
             success: true,
-            message: 'successfully added product to cart ',
+            message: 'successfully  ',
             data: cart,
             error: {}
         })
@@ -42,7 +44,7 @@ async function addProductToCart(req, res){
         if(err instanceof AppError){
             return res.status(err.statusCode).json({
                 success: false,
-                message: err.reason,
+                message: err.message,
                 data: {},
                 error: err
         })
@@ -63,7 +65,7 @@ async function clearCart(req, res){
         const response = await clearCartById(req.user.id);
         return res.status(200).json({
             success: true,
-            message: 'successfully added product to cart ',
+            message: 'successfully removed product from cart ',
             data: response,
             error: {}
         })
@@ -71,7 +73,7 @@ async function clearCart(req, res){
         if(err instanceof AppError){
             return res.status(err.statusCode).json({
                 success: false,
-                message: err.reason,
+                message: err.message,
                 data: {},
                 error: err
         })

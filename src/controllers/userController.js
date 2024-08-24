@@ -1,4 +1,5 @@
-const UserRepository = require("../repositories/userRepository")
+const UserRepository = require("../repositories/userRepository");
+const AppError = require("../utils/appError");
 const UserService = require("../services/userService")
 
  async function createUser(req, res){
@@ -14,14 +15,23 @@ const UserService = require("../services/userService")
         data: response,
         error:{}
     });
-} catch(error){
-    return res.json({
-     message : error.message,
-     success : false,
-     data: {},
-     error:error
+} catch(err){
+    if(err instanceof AppError) {
+    return res.status(err.statusCode).json({
+        success: false,
+        message: err.message,
+        data: {},
+        error: err
     })
-}
+    }
+    console.log(err)
+    return res.status(500).json({
+        success: false,
+        message: "Something went wrong",
+        data: {},
+        error: err
+    })
+   }
 }
 module.exports = {
                   createUser

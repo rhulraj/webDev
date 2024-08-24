@@ -5,12 +5,13 @@ const BadRequestError = require("../utils/badRequest");
 const InternalServerError = require("../utils/internalServerError");
 const notFoundError = require("../utils/notFoundError");
 const { getCartById } = require("../repositories/cartRepository");
+const User = require("../schema/userSchema");
 
 
 async function createOrder(userId,paymentMethod){
  
     const cart = await getCartById(userId);
-
+    
     const userRepo = new UserRepository();
     const user = await userRepo.findUser({_id : cart.user});
 
@@ -26,20 +27,21 @@ async function createOrder(userId,paymentMethod){
     orderObject.status = "ORDERED";
     
     orderObject.items = cart.items.map(cartItem => {
-        return {product : cartItem.product._id, qauantity : cartItem.qauantity};
+        return {product : cartItem.product._id, qauntity : cartItem.qauntity};
     });
 
+    
     orderObject.totalPrice = 0;
     
     cart.items.forEach((cartItem)=>{
-        orderObject.totalPrice += cartItem.qauantity * cartItem.product.price;
+        orderObject.totalPrice += cartItem.qauntity * cartItem.product.price;
     })
 
     orderObject.address = user.address;
     orderObject.paymentMethod = paymentMethod;
 
     const order = await createNewOrder(orderObject);
-
+    console.log(order)
     if(!order){
         throw new InternalServerError();
     }
@@ -47,6 +49,7 @@ async function createOrder(userId,paymentMethod){
     await clearAllProductToCart(userId);
 
     return order;
+    console.log(order)
 }
 
 async function getAllOrderCreatedByUser(userId){

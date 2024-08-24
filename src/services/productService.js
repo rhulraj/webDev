@@ -9,9 +9,11 @@ async function productService(productDetails){
     //1. we shoudcheck if an image is coming to create the product, then weshould first upload it on
     //cloudinary
     const imagePath = productDetails.imagePath;
+    console.log(imagePath)
     if(imagePath){
         try{
             const response = await cloudinary.uploader.upload(imagePath);
+            console.log(response)
             var ProductImage = response.secure_url;
             await fs.unlink(process.cwd() +  "/" + imagePath);
         } catch(err){
@@ -35,6 +37,7 @@ async function getProductById(productId){
     }
     return product;
 }
+
 
 async function deleteProductById(productId){
     const response = await productRepository.deleteProductById(productId)

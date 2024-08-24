@@ -1,13 +1,16 @@
+const { getAllProducts } = require("../repositories/productRepository");
 const {productService, getProductById, deleteProductById} = require("../services/productService");
 const AppError = require("../utils/appError");
 
 async function addProduct(req, res){
    
    try{
-    const product = await productService({
+    console.log(req.body)
+    const product = await 
+    productService({
         productName: req.body.productName,
         description: req.body.description,
-        imagePath: req.file?.path,
+        imagePath: req.file?.productImage,
         price: req.body.price,
         category: req.body.category, // if category is undefined, veg will be stored 
         inStock: req.body.inStock,   // if inStock is undefined, true will be stored 
@@ -23,7 +26,7 @@ async function addProduct(req, res){
     if(err instanceof AppError) {
     return res.status(err.statusCode).json({
         success: false,
-        message: err.reason,
+        message: err.message,
         data: {},
         error: err
     })
@@ -31,7 +34,7 @@ async function addProduct(req, res){
     console.log(err)
     return res.status(500).json({
         success: false,
-        message: err.reason,
+        message: err.message,
         data: {},
         error: err
     })
@@ -53,7 +56,7 @@ async function findProduct(req, res){
         if(err instanceof AppError){
             return res.status(err.statusCode).json({
                 success: false,
-                message: err.reason,
+                message: err.message,
                 data: {},
                 error: err
         })
@@ -68,6 +71,37 @@ async function findProduct(req, res){
     })
 }
 }
+
+async function findAllProducts(req, res){
+    const id = req.params.id;
+    try{
+        const products = await getAllProducts(id);
+        return res.status(200).json({
+            success: true,
+            message: 'successfully get the product',
+            data: products,
+            error: {}
+        })
+       } catch(err){
+        if(err instanceof AppError){
+            return res.status(err.statusCode).json({
+                success: false,
+                message: err.message,
+                data: {},
+                error: err
+        })
+    }
+        console.log(err)
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+            data: {},
+            error: err
+        
+    })
+}
+}
+
 async function DeleteProduct(req, res){
     const id = req.params.id;
     try{
@@ -99,6 +133,7 @@ async function DeleteProduct(req, res){
 }
 module.exports ={
     addProduct,
-    findProduct, 
+    findProduct,
+    findAllProducts, 
     DeleteProduct
 }
