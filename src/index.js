@@ -13,7 +13,7 @@ const orderRouter = require('./routes/orderRoute');
 
 const app = express();
 app.use(cors({
-      origin: 'http://localhost:5173',  // allow to users to accept request from different origin
+      origin: 'https://capable-palmier-db59d7.netlify.app/',  // allow to users to accept request from different origin
       credentials: true, //allow session cookie from browser to pass through
 }));
 app.use(cookieParser());
